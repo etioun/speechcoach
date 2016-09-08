@@ -14,16 +14,8 @@ let styles = {
 export default class VoiceList extends React.Component {
 	constructor() {
 		super();
-		// Initial state of the component
 
     this.selectionChangedHdlr = this.selectionChangedHdlr.bind(this);
-    // chrome.storage.sync.get({
-    //   lastVoiceUsed: 12
-    // }, items => {
-    //   this.state.selected = items.lastVoiceUsed;
-    // });
-    // this.state.selected = selected;
-    // console.log(this.state.selected );
   }
 
   componentWillMount() {
