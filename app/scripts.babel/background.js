@@ -22,7 +22,6 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 function toggleExtension(tab)
 {
   chrome.tabs.query({active:true, currentWindow: true}, function(tabs) {
-    // chrome.extension.getBackgroundPage().console.log(tabs[0].id + ','+ enable);
     chrome.tabs.sendMessage(tabs[0].id, {action: 'toggle'}, enabled => {
       updateState(tabs[0], enabled);
       showState();
