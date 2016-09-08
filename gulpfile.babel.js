@@ -11,9 +11,11 @@ const $ = gulpLoadPlugins();
 
 gulp.task('browserify', function(){
   brow({
-    entries: 'app/scripts/contentscript.js',
+    entries: 'app/scripts.babel/contentscript/contentscript.js',
     debug: true
-  }).bundle()
+  })
+  .transform("babelify", {presets: ["es2015", "react"]})
+  .bundle()
   .pipe(source('bundledContentscript.js'))
   .pipe(gulp.dest('app/scripts'))
 });
@@ -31,19 +33,28 @@ gulp.task('extras', () => {
   }).pipe(gulp.dest('dist'));
 });
 
-function lint(files, options) {
-  return () => {
-    return gulp.src(files)
-      .pipe($.eslint(options))
-      .pipe($.eslint.format());
-  };
-}
-
-gulp.task('lint', lint('app/scripts.babel/**/*.js', {
-  env: {
-    es6: true
-  }
-}));
+gulp.task('lint', () => {
+    // ESLint ignores files with "node_modules" paths.
+    // So, it's best to have gulp ignore the directory as well.
+    // Also, Be sure to return the stream from the task;
+    // Otherwise, the task may end before the stream has finished.
+    return gulp.src('app/scripts.babel/**/*.js')
+        // eslint() attaches the lint output to the "eslint" property
+        // of the file object so it can be used by other modules.
+        .pipe($.eslint({
+          parserOptions: {
+            "ecmaFeatures": {
+               "jsx": true
+             }
+          }
+        }))
+        // eslint.format() outputs the lint results to the console.
+        // Alternatively use eslint.formatEach() (see Docs).
+        .pipe($.eslint.format())
+        // To have the process exit with an error code (1) on
+        // lint error, return the stream and pipe to failAfterError last.
+        // .pipe($.eslint.failAfterError());
+});
 
 gulp.task('images', () => {
   return gulp.src('app/images/**/*')
@@ -91,17 +102,9 @@ gulp.task('chromeManifest', () => {
 });
 
 gulp.task('babel', () => {
-  return gulp.src('app/scripts.babel/**/*.js')
+  return gulp.src('app/scripts.babel/*.js')
       .pipe($.babel({
         presets: ['es2015']
-      }))
-      .pipe(gulp.dest('app/scripts'));
-});
-
-gulp.task('babeljsx', () => {
-  return gulp.src('app/scripts.babel/**/*.jsx')
-      .pipe($.babel({
-        presets: ['react']
       }))
       .pipe(gulp.dest('app/scripts'));
 });
@@ -119,10 +122,8 @@ gulp.task('watch', ['lint', 'babel', 'html','browserify'], () => {
     'app/_locales/**/*.json'
   ]).on('change', $.livereload.reload);
 
-  gulp.watch(['app/scripts/contentscript.js', 'app/scripts/speechRecognition.js'], ['browserify']);
-
-  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel']);
-  gulp.watch('app/scripts.babel/**/*.jsx', ['lint','babeljsx']);
+  gulp.watch('app/scripts.babel/contentscript/**/*.js', ['lint', 'browserify']);
+  gulp.watch('app/scripts.babel/*.js', ['lint','babel']);
   gulp.watch('bower.json', ['wiredep']);
 });
 

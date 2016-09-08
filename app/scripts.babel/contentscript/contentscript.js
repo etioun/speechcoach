@@ -42,14 +42,14 @@ chrome.runtime.onMessage.addListener(
 
 function showWidget(visible) {
   if (commandCenterElt === null) {
-    commandCenterElt = document.createElement("div");
+    commandCenterElt = document.createElement('div');
     document.body.appendChild(commandCenterElt)
     ReactDOM.render(<CommandCenter CCMediator={CCMediator}/>, commandCenterElt);
   }
   if (visible) {
-    commandCenterElt.style.visibility = "visible";
+    commandCenterElt.style.visibility = 'visible';
   } else {
-    commandCenterElt.style.visibility = "hidden";
+    commandCenterElt.style.visibility = 'hidden';
   }
 }
 
