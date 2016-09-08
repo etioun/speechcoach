@@ -7,6 +7,16 @@ let RecordModes = {
 	recording : 'recording'
 }
 
+let styles = {
+  root : {
+    all: 'initial',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    padding: '5px',
+		border: '1px solid #000'
+	}
+};
+
 export default class Record extends React.Component {
 	constructor() {
 		super();
@@ -33,7 +43,7 @@ export default class Record extends React.Component {
 	}
 	render() {
     return (
-      <button onClick={ this.clickHdlr.bind(this) } type="button">{ this.getLabel() }</button>
+      <button style={ styles.root } onClick={ this.clickHdlr.bind(this) } type="button">{ this.getLabel() }</button>
 		);
 	}
 }

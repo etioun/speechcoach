@@ -1,6 +1,15 @@
 import React from 'react';
 import SpeechRecognition from '../SpeechRecognition';
 
+let styles = {
+  root : {
+    fontSize: 'initial',
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    padding: '5px',
+		border: '1px solid #000'
+	}
+};
 
 export default class VoiceList extends React.Component {
 	constructor() {
@@ -46,7 +55,7 @@ export default class VoiceList extends React.Component {
   }
 	render() {
     return (
-      <select name='language' value={ this.state.selected } onChange={ this.selectionChangedHdlr } >
+      <select style={ styles.root } name='language' value={ this.state.selected } onChange={ this.selectionChangedHdlr } >
         {this.state.voices.map( (voice, index ) => {
           return <option key={ index } value={ index } >{ voice.lang + ' ' + voice.voiceURI }</option>;
         })}

@@ -3,7 +3,7 @@ import SpeechRecognition from '../SpeechRecognition';
 
 let styles = {
   root : {
-		backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5',
     border: '1px solid #000',
     padding: '10px',
     borderRadius: '25px'
